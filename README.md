@@ -1,2 +1,2 @@
-# Image-Processing
+# Image Processing
 Bài tập lớn Xử lý ảnh
