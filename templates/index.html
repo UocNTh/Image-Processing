@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Image Processing</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Image Processing</h1>
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Choose an image:</label>
+                <input type="file" name="file" accept=".png, .jpg, .jpeg, .gif" class="form-control-file">
+            </div>
+            <div class="form-group">
+                <label for="function">Chosse Function:</label>
+                <select name="function" class="form-control">
+                    <option value="negative">Âm bản</option>
+                    <option value="threshold">Phân ngưỡng</option>
+                    <option value="log_transform">Biển đổi Logarith</option>
+                    <option value="power_law_transform">Biến đổi hàm mũ</option>
+                    <option value="gray_histogram_balance">Cân bằng lược đồ xám</option>
+                    <option value="average_filter">Bộ lọc trung bình</option>
+                    <option value="weighted_averaging">Bộ lọc trung bình có trọng số</option>
+                    <option value="median_filter">Bộ lọc trung vị</option>
+                    <option value="roberts_operator">Roberts</option>
+                    <option value="sobels_operator">Sobels</option>
+                    <option value="prewitt_operator">Prewitt</option>
+                    <option value="laplacian_operator">Laplacian</option>
+                    <option value="canny_operator">Canny</option>
+                    <option value="otsu_algorithm">OTSU</option>
+                    <option value="erosion_image">Phép co</option>
+                    <option value="dilation_image">Phép dãn</option>
+
+                </select>
+                <input type="hidden" name="selectedFunctionHidden" id="selectedFunctionHidden" value="">
+            </div>
+            <button type="submit" class="btn btn-primary">Process Image</button>
+        </form>
+
+        {% if original %}
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <h2>Original Image</h2>
+                    <img src="{{ original }}" class="img-fluid" alt="Original">
+                </div>
+                <div class="col-md-6">
+                    <h2>Processed Image</h2>
+                    <img src="{{ processed }}" class="img-fluid" alt="Processed">
+                </div>
+            </div>
+        {% endif %}
+        
+        {% if error %}
+            <div class="alert alert-danger mt-4" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var functionDropdown = document.getElementById('selectedFunction');
+            var displaySpan = document.getElementById('selectedFunctionDisplay');
+
+            functionDropdown.addEventListener('change', function () {
+                displaySpan.textContent = 'Chức năng: ' + this.options[this.selectedIndex].text;
+                // Cập nhật giá trị của input ẩn khi chức năng thay đổi
+                document.getElementById('selectedFunctionHidden').value = this.value;
+            });
+        });
+
+        // Hàm được gọi khi nút "Xử Lý Ảnh" được nhấn
+        function updateHiddenInput() {
+            var functionDropdown = document.getElementById('selectedFunction');
+            // Cập nhật giá trị của input ẩn với giá trị hiện tại của dropdown
+            document.getElementById('selectedFunctionHidden').value = functionDropdown.value;
+        }
+    </script>
+</body>
+</html>
